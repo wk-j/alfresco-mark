@@ -12,4 +12,8 @@ Executable HMark
   main-is: Main.hs
   buildable: True
   build-depends:
-      base -any
+      base -any,
+      process -any,
+      directory -any,
+      time -any,
+      strict -any

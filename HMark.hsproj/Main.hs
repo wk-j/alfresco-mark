@@ -1,12 +1,73 @@
 module Main where
   
 import System.Environment as IO
+import Text.Printf
+
+import Prelude hiding (readFile)
+import System.IO.Strict (readFile)
+import Data.Time (getCurrentTime, getZonedTime)
+import System.Directory
+import System.Process
 
 githubUser = IO.getEnv "ghu"
 githubToken = IO.getEnv "ghp"
 
+getReadmeContent file =
+  do
+    contents <- readFile file
+    return $ lines contents
+    
+saveReadmeContent file contents =
+  do
+    writeFile file $ unlines contents
+
+insertAt :: a -> [a] -> Int -> [a]
+insertAt x ys 1 = x : ys
+insertAt x (y:ys) n = y : insertAt x ys (n - 1)
+
+formatMark mark url = do
+    zonedTime <- fmap show getZonedTime
+    return $ printf "- `[%s]` [%s](%s)" (take 16 zonedTime) mark url
+  
+processMark file mark url =
+  
+  do
+    lines <- getReadmeContent file
+    format <- formatMark mark url
+    let newLines  = insertAt format lines 3
+    
+    saveReadmeContent file newLines
+
+    putStrLn mark
+    putStrLn url
+    
+commit :: String -> String -> IO()
+commit markRoot mark = do
+
+    let addCmd = printf "git -C %s add --all" markRoot
+    let commitCmd = printf "git -C %s commit -m \"%s\"" markRoot mark
+    let pushCmd = printf "git -C %s push -u github master" markRoot
+  
+    callCommand addCmd
+    callCommand commitCmd
+    callCommand pushCmd
+
 main = do
+  root <- getHomeDirectory
+  args <- IO.getArgs
   user <- githubUser
   pass <- githubToken
-  putStrLn user
-  putStrLn pass
+  
+  let markRoot = root ++ "/.mark"
+  let readme = markRoot ++ "/README.md"
+  
+  case args of 
+    ["commit"] ->
+      putStrLn "Commit"
+    [mark, url] -> do
+      processMark readme mark url
+      commit markRoot mark
+      putStrLn "ss"
+    otherwise ->
+      putStrLn "Invalid arguments"
+      
