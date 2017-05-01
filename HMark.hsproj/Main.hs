@@ -38,8 +38,8 @@ processMark file mark url =
     
     saveReadmeContent file newLines
 
-    putStrLn mark
-    putStrLn url
+    putStrLn $ printf " -- s%" mark
+    putStrLn $ printf " -- %s" url
     
 commit :: String -> String -> IO()
 commit markRoot mark = do
@@ -67,7 +67,6 @@ main = do
     [mark, url] -> do
       processMark readme mark url
       commit markRoot mark
-      putStrLn "ss"
     otherwise ->
       putStrLn "Invalid arguments"
       
