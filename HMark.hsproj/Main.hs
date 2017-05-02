@@ -38,7 +38,7 @@ processMark file mark url =
     
     saveReadmeContent file newLines
 
-    putStrLn $ printf " -- s%" mark
+    putStrLn $ printf " -- %s" mark
     putStrLn $ printf " -- %s" url
     
 commit :: String -> String -> IO()
