@@ -47,7 +47,7 @@ main = do
   root <- getHomeDirectory
   args <- IO.getArgs
 
-  let markRoot = root ++ "/.mark"
+  let markRoot = root ++ "/.bookmarks"
   let readme = markRoot ++ "/README.md"
   
   case args of 
