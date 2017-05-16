@@ -6,9 +6,9 @@ license: AllRightsReserved
 stability: experimental
 data-files:
     README.md
-x-ghc-framework-version: 7.10.3-6.29-1
-x-last-ide-version: HfM1.4.0
-Executable HMark
+-- x-ghc-framework-version: 7.10.3-6.29-1
+-- x-last-ide-version: HfM1.4.0
+Executable h-mark
   main-is: Main.hs
   buildable: True
   build-depends:
