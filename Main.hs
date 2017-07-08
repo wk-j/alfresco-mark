@@ -12,8 +12,7 @@ getReadmeContent file = do
     contents <- readFile file
     return $ lines contents
     
-saveReadmeContent file contents = do
-    writeFile file $ unlines contents
+saveReadmeContent file contents = writeFile file $ unlines contents
 
 insertAt :: a -> [a] -> Int -> [a]
 insertAt x ys 1 = x : ys
@@ -35,10 +34,12 @@ processMark file mark url = do
     
 commit :: String -> String -> IO()
 commit markRoot mark = do
-    let addCmd = printf "git -C %s add --all" markRoot
-    let commitCmd = printf "git -C %s commit -m \"%s\"" markRoot mark
-    let pushCmd = printf "git -C %s push -u github master" markRoot
+    let addCmd      = printf "git -C %s add --all" markRoot
+    let commitCmd   = printf "git -C %s commit -m \"%s\"" markRoot mark
+    let pullCmd     = printf "get -C %s pull"  markRoot   
+    let pushCmd     = printf "git -C %s push -u github master" markRoot
     
+    callCommand pullCmd
     callCommand addCmd
     callCommand commitCmd
     callCommand pushCmd
@@ -56,6 +57,5 @@ main = do
     [mark, url] -> do
       processMark readme mark url
       commit markRoot mark
-    otherwise ->
+    _ ->
       putStrLn "Invalid arguments"
-      
