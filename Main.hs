@@ -36,8 +36,8 @@ commit :: String -> String -> IO()
 commit markRoot mark = do
     let addCmd      = printf "git -C %s add --all" markRoot
     let commitCmd   = printf "git -C %s commit -m \"%s\"" markRoot mark
-    let pullCmd     = printf "get -C %s pull"  markRoot   
-    let pushCmd     = printf "git -C %s push -u github master" markRoot
+    let pullCmd     = printf "git -C %s pull"  markRoot   
+    let pushCmd     = printf "git -C %s push -u origin master" markRoot
     
     callCommand pullCmd
     callCommand addCmd
