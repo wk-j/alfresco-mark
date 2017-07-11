@@ -8,24 +8,28 @@ import Data.Time (getCurrentTime, getZonedTime)
 import System.Directory
 import System.Process
 
+getReadmeContent :: String -> IO [String]
 getReadmeContent file = do
     contents <- readFile file
     return $ lines contents
     
+saveReadmeContent :: String -> [String] -> IO()
 saveReadmeContent file contents = writeFile file $ unlines contents
 
 insertAt :: a -> [a] -> Int -> [a]
 insertAt x ys 1 = x : ys
 insertAt x (y:ys) n = y : insertAt x ys (n - 1)
 
+formatMark :: String -> String -> IO String
 formatMark mark url = do
     zonedTime <- fmap show getZonedTime
     return $ printf "- `[%s]` [%s](%s)" (take 16 zonedTime) mark url
   
+processMark :: String -> String -> String -> IO()
 processMark file mark url = do
-    lines <- getReadmeContent file
+    lines' <- getReadmeContent file
     format <- formatMark mark url
-    let newLines  = insertAt format lines 3
+    let newLines  = insertAt format lines' 3
     
     saveReadmeContent file newLines
 
@@ -44,6 +48,7 @@ commit markRoot mark = do
     callCommand commitCmd
     callCommand pushCmd
 
+main :: IO()
 main = do
   root <- getHomeDirectory
   args <- IO.getArgs
