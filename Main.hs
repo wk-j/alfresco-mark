@@ -35,15 +35,18 @@ processMark file mark url = do
 
     putStrLn $ printf " -- %s" mark
     putStrLn $ printf " -- %s" url
+
+pull :: String -> IO()
+pull markRoot = do
+    let pullCmd     = printf "git -C %s pull"  markRoot   
+    callCommand pullCmd
     
 commit :: String -> String -> IO()
 commit markRoot mark = do
     let addCmd      = printf "git -C %s add --all" markRoot
     let commitCmd   = printf "git -C %s commit -m \"%s\"" markRoot mark
-    let pullCmd     = printf "git -C %s pull"  markRoot   
     let pushCmd     = printf "git -C %s push -u origin master" markRoot
     
-    callCommand pullCmd
     callCommand addCmd
     callCommand commitCmd
     callCommand pushCmd
@@ -57,10 +60,11 @@ main = do
   let readme = markRoot ++ "/README.md"
   
   case args of 
-    ["commit"] ->
-      putStrLn "Commit"
-    [mark, url] -> do
-      processMark readme mark url
-      commit markRoot mark
-    _ ->
-      putStrLn "Invalid arguments"
+    ["commit"] -> 
+        putStrLn "Commit"
+    [mark, url] -> do 
+        pull markRoot 
+        processMark readme mark url 
+        commit markRoot mark
+    _ -> 
+        putStrLn "Invalid arguments"
