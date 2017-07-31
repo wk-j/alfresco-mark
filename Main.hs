@@ -4,7 +4,7 @@ import System.Environment as IO
 import Text.Printf
 import Prelude hiding (readFile)
 import System.IO.Strict (readFile)
-import Data.Time (getCurrentTime, getZonedTime)
+import Data.Time (getZonedTime)
 import System.Directory
 import System.Process
 
@@ -29,7 +29,7 @@ processMark :: String -> String -> String -> IO()
 processMark file mark url = do
     lines' <- getReadmeContent file
     format <- formatMark mark url
-    let newLines  = insertAt format lines' 3
+    let newLines  = insertAt format lines' 4
     
     saveReadmeContent file newLines
 
@@ -56,7 +56,7 @@ main = do
   root <- getHomeDirectory
   args <- IO.getArgs
 
-  let markRoot = root ++ "/.bookmarks"
+  let markRoot = root ++ "/.alfresco-resource"
   let readme = markRoot ++ "/README.md"
   
   case args of 
