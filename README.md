@@ -1,6 +1,6 @@
-## H-Mark
+## Alfresco-Mark
 
-Command line tool for create [Bookmarks](https://github.com/wk-j/bookmarks)
+Command line tool for create Bookmarks
 
 ## Build
 
